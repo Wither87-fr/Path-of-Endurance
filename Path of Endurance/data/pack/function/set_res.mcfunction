@@ -5,4 +5,5 @@
  # Created by .
 ##
 
-$tellraw @s ["",{"text":"Your new resitance : ","color":"light_purple"},{"text":"$(res)","color":"aqua"}]
+$tellraw @s ["",{"text":"Resistance : ","color":"light_purple"},{"text":"$(res)","color":"aqua"}]
+$tellraw @s ["",{"text":"Advancements : ","color":"light_purple"},{"text":"[$(tot)/112]","color":"aqua"}]

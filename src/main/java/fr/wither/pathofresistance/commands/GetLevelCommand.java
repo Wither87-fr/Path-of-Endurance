@@ -1,22 +1,21 @@
 package fr.wither.pathofresistance.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.wither.pathofresistance.Commons;
-import fr.wither.pathofresistance.PathOfResistance;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.commands.RandomCommand;
 import net.minecraft.server.level.ServerPlayer;
 
-public class GetLevelCommand extends RandomCommand {
+public class GetLevelCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("getRes")
+        dispatcher.register(
+                LiteralArgumentBuilder.<CommandSourceStack>literal("getRes")
                 .then(
                         Commands.argument("target", EntityArgument.player()) // Adding level argument
                         .executes(GetLevelCommand::execute)

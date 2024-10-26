@@ -1,7 +1,6 @@
 package fr.wither.pathofresistance.events.server;
 
 import fr.wither.pathofresistance.Commons;
-import fr.wither.pathofresistance.PathOfResistance;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

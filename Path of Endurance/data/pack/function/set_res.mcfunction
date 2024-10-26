@@ -5,4 +5,4 @@
  # Created by .
 ##
 
-$say Your Res : $(res)
+$tellraw @s ["",{"text":"Your new resitance : ","color":"light_purple"},{"text":"$(res)","color":"aqua"}]

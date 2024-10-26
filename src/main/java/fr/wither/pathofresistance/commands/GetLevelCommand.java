@@ -5,11 +5,17 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.wither.pathofresistance.Commons;
+import fr.wither.pathofresistance.PathOfResistance;
+import fr.wither.pathofresistance.attributes.Resistance;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.PlayerScoreEntry;
+
+import java.util.Collection;
+import java.util.List;
 
 public class GetLevelCommand {
 
@@ -25,16 +31,28 @@ public class GetLevelCommand {
 
     private static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 
-        ServerPlayer player = EntityArgument.getPlayer(context, "target"); // Getting the Executing Player
+        ServerPlayer player = EntityArgument.getPlayer(context, "target");
+
+
         try {
-            Integer level = 0;
-            if(Commons.IMMUNITY_LEVEL_PLAYERS.containsKey(player.getUUID())) {
-                level = Commons.IMMUNITY_LEVEL_PLAYERS.get(player.getUUID());
-                player.sendSystemMessage(Component.literal("Your current resistence level is : " + level.toString()));
-            } else {
-                player.sendSystemMessage(Component.literal("No resistance explicitly set, default to : 0"));
+
+            Collection<PlayerScoreEntry> scores = player.getScoreboard().listPlayerScores(player.getScoreboard().getObjective("Res"));
+            int scoreboardValue = -490;
+            for(PlayerScoreEntry score : scores) {
+                if(score.owner() == player.getScoreboardName()) {
+                    PathOfResistance.LOGGER.info("==============[TROUVE : " + score.value() + " ]==============" );
+                    scoreboardValue = score.value();
+                }
             }
-            return level;
+
+            player.setData(Resistance.RESISTANCE, scoreboardValue);
+
+            Integer playerResistance = player.getData(Resistance.RESISTANCE);
+
+
+            player.sendSystemMessage(Component.literal("Your current resistence level is : " + playerResistance));
+
+            return playerResistance;
         } catch (Exception e) {
             return 0;
         }

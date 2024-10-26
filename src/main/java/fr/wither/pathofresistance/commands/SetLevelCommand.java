@@ -6,11 +6,21 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.wither.pathofresistance.Commons;
 import fr.wither.pathofresistance.PathOfResistance;
+import fr.wither.pathofresistance.attributes.Resistance;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.Objective;
+import net.minecraft.world.scores.PlayerScoreEntry;
+import net.minecraft.world.scores.Score;
+import net.minecraft.world.scores.Scoreboard;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.data.fixes.NeoForgeEntityLegacyAttributesFix;
+
+import java.util.Collection;
 
 public class SetLevelCommand {
 
@@ -27,19 +37,16 @@ public class SetLevelCommand {
     }
 
     private static int execute(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "target");
+        int level = IntegerArgumentType.getInteger(context, "level"); // Getting the level argument
 
         try {
-            ServerPlayer player = EntityArgument.getPlayer(context, "target"); // Getting the Executing Player
-            int level = IntegerArgumentType.getInteger(context, "level"); // Getting the level argument
 
-            Commons.IMMUNITY_LEVEL_PLAYERS.remove(player.getUUID());
-
-            Commons.IMMUNITY_LEVEL_PLAYERS.put(player.getUUID(), level);
-
+            player.setData(Resistance.RESISTANCE, level);
             player.sendSystemMessage(Component.literal("Your resistance was set to " + level));
 
             return 1;
-        } catch (CommandSyntaxException e) {
+        } catch (Exception e) {
             return 0;
         }
     }

@@ -1,5 +1,8 @@
 package fr.wither.pathofresistance;
 
+import fr.wither.pathofresistance.attributes.Resistance;
+import fr.wither.pathofresistance.commands.GetLevelCommand;
+import fr.wither.pathofresistance.commands.SetLevelCommand;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -29,7 +32,10 @@ public class PathOfResistance
 
         NeoForge.EVENT_BUS.register(this);
 
+        Resistance.register(modEventBus);
+
         modEventBus.addListener(this::addCreative);
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

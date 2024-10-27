@@ -12,6 +12,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.scores.Objective;
 import net.minecraft.world.scores.PlayerScoreEntry;
 
 import java.util.Collection;
@@ -36,10 +37,20 @@ public class GetLevelCommand {
 
         try {
 
-            Collection<PlayerScoreEntry> scores = player.getScoreboard().listPlayerScores(player.getScoreboard().getObjective("Res"));
-            int scoreboardValue = -490;
+            PathOfResistance.LOGGER.info("==============[ SYNC SCOREBOARD ]==============" );
+            Objective objective = player.getScoreboard().getObjective("Res");
+            PathOfResistance.LOGGER.info(objective.getName());
+            PathOfResistance.LOGGER.info(player.getScoreboardName());
+            Collection<PlayerScoreEntry> scores = player.getScoreboard().listPlayerScores(objective);
+
+            PathOfResistance.LOGGER.info(scores.toString());
+            int scoreboardValue = -465;
+
             for(PlayerScoreEntry score : scores) {
-                if(score.owner() == player.getScoreboardName()) {
+                PathOfResistance.LOGGER.info("\"" + score.owner() + "\"");
+                PathOfResistance.LOGGER.info("\"" + player.getScoreboardName() + "\"");
+                PathOfResistance.LOGGER.info(score.owner().equals(player.getScoreboardName()) ? "Oui" : "Non");
+                if(score.owner().equals(player.getScoreboardName())) {
                     PathOfResistance.LOGGER.info("==============[TROUVE : " + score.value() + " ]==============" );
                     scoreboardValue = score.value();
                 }
